@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "LLM Tutor"
+version = "0.1.0"
+description = ""
+authors = ["Felix Rauterberg <felix-rauterberg@gmx.de>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.11, <3.14"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "*"
+black = "*"
+flake8 = "*"
+bandit = "*"
+isort = "*"
+pyupgrade = "*"
+yesqa = "*"
+pycln = "*"
+nbqa = {extras = ["toolchain"], version = "^1.9.1"}
+
+
+[tool.mypy]
+ignore_missing_imports = true
