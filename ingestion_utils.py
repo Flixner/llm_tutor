@@ -2,6 +2,7 @@ import os
 import re
 
 import PyPDF2
+import whisper
 
 
 def clean_text(text: str) -> str:
@@ -61,6 +62,8 @@ def extract_text(file_path: str, model_size: str = "base") -> str:
         raw_text = extract_text_from_pdf(file_path) or ""
     elif file_ext == ".txt":
         raw_text = extract_text_from_txt(file_path) or ""
+    elif file_ext in [".wav", ".mp3", ".mp4", ".mov", ".mkv", ".avi"]:
+        raw_text = extract_text_from_audio_or_video(file_path, model_size) or ""
     else:
         print(f"Dateiformat '{file_ext}' wird nicht unterstützt.")
         return ""
@@ -69,8 +72,21 @@ def extract_text(file_path: str, model_size: str = "base") -> str:
     return cleaned
 
 
+def extract_text_from_audio_or_video(file_path: str, model_size: str = "base") -> str | None:
+    """
+    Extrahiert per Whisper die Audiospur und transkribiert das Gesprochene in Text.
+    """
+    try:
+        model = whisper.load_model(model_size)
+        result = model.transcribe(file_path, fp16=False)  # fp16=False bei CPU-Einsatz
+        return result.get("text", "")
+    except Exception as e:
+        print(f"Fehler bei der Transkription: {e}")
+        return None
+
+
 if __name__ == "__main__":
-    test_file_path = r"data\documents\Data_Governance_A_Guide_----_(Chapter_1_Overview_and Importance_of Data_Governance).pdf"
+    test_file_path = r"data\audio\LV1_Modulinhalte  -Wie absolviere ich das Modul erfolgreich_1.mp3"
 
     extracted_text = extract_text(test_file_path, model_size="base")
     if extracted_text:
