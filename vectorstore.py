@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 import chromadb
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
